@@ -30,5 +30,5 @@ interface Dispatchers {
             withContext(ui, block)
     }
 
-    class Base @Inject constructor() : Abstract(kotlinx.coroutines.Dispatchers.Main, kotlinx.coroutines.Dispatchers.IO)
+    class Impl @Inject constructor() : Abstract(kotlinx.coroutines.Dispatchers.Main, kotlinx.coroutines.Dispatchers.IO)
 }

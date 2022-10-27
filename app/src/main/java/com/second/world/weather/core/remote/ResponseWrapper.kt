@@ -1,10 +1,9 @@
-package com.ahinfo.ahteam.core.remote
+package com.second.world.weather.core.remote
 
-import com.ahinfo.ahteam.core.bases.BaseResult
-import com.ahinfo.ahteam.core.bases.Mapper
-import com.second.world.weather.core.remote.Failure
+import com.ahinfo.ahteam.core.remote.NoInternetConnectionException
+import com.second.world.weather.core.bases.BaseResult
+import com.second.world.weather.core.bases.Mapper
 import retrofit2.Response
-import java.net.ProtocolException
 import javax.inject.Inject
 
 /**
@@ -13,33 +12,52 @@ import javax.inject.Inject
  */
 interface ResponseWrapper {
 
-    suspend fun <T, R> handleResponse(
+    suspend fun <T, R> handleResponseWithMapper(
         mapper: Mapper<T, R>,
-        apiRequest: suspend () -> Response<T>
+        apiRequest: suspend () -> Response<T>,
     ): BaseResult<R, Failure>
 
-    class Base @Inject constructor() : ResponseWrapper {
+    suspend fun <T> handleResponse(
+        apiRequest: suspend () -> Response<T>,
+    ): BaseResult<T, Failure>
 
-        override suspend fun <T, R> handleResponse(
+    class Impl @Inject constructor() : ResponseWrapper {
+
+        override suspend fun <T, R> handleResponseWithMapper(
             mapper: Mapper<T, R>,
-            apiRequest: suspend () -> Response<T>
+            apiRequest: suspend () -> Response<T>,
         ): BaseResult<R, Failure> {
 
+            return baseResult(apiRequest) { body ->
+                BaseResult.Success(mapper.map(body!!))
+            }
+        }
+
+        override suspend fun <T> handleResponse(
+            apiRequest: suspend () -> Response<T>,
+        ): BaseResult<T, Failure> {
+
+            return baseResult(apiRequest) { body ->
+                BaseResult.Success(body!!)
+            }
+        }
+
+        private suspend fun <R, T> baseResult(
+            apiRequest: suspend () -> Response<T>,
+            successResult : (T) -> BaseResult<R, Failure> ,
+        ): BaseResult<R, Failure> {
             return try {
                 val response = apiRequest.invoke()
 
                 if (response.isSuccessful) {
                     val body = response.body()
-                    BaseResult.Success(mapper.map(body!!))
+                    successResult.invoke(body!!)
                 } else {
                     BaseResult.Error(Failure(response.code(), response.message()))
                 }
             } catch (e: NoInternetConnectionException) {
                 BaseResult.Error(Failure(0, e.message))
-            } catch (e: ProtocolException) {
-                BaseResult.Error(Failure(1, "Protocol exception"))
-            }
-             catch (e: Exception) {
+            } catch (e: Exception) {
                 e.printStackTrace()
                 BaseResult.Error(Failure(-1, e.message.toString()))
             }
