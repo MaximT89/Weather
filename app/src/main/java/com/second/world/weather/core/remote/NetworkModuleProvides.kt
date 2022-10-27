@@ -1,6 +1,6 @@
 package com.second.world.weather.core.remote
 
-import com.ahinfo.ahteam.core.constants.Constants
+import com.second.world.weather.core.constants.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

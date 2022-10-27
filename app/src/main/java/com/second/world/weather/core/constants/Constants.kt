@@ -1,4 +1,4 @@
-package com.ahinfo.ahteam.core.constants
+package com.second.world.weather.core.constants
 
 object Constants {
 
