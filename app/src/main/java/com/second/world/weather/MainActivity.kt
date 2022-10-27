@@ -1,6 +1,5 @@
 package com.second.world.weather
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.second.world.weather.core.bases.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint

@@ -47,8 +47,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
         initView()
         listenerBundleArguments()
         initObservers()
-        title()
-        navigationArrowBack()
         initCallbacks()
     }
 
@@ -100,8 +98,6 @@ abstract class BaseFragment<B : ViewBinding, VM : ViewModel>(private val inflate
 
     abstract fun initView(): Unit?
     abstract fun initObservers()
-    abstract fun title()
-    abstract fun navigationArrowBack()
 
     /**
      * Если нужно отобразить Snackbar, то его всегда можно получить из базового фрагмента.
