@@ -1,6 +1,5 @@
 package com.second.world.weather.core.remote
 
-import com.ahinfo.ahteam.core.remote.NoInternetConnectionException
 import com.second.world.weather.core.bases.BaseResult
 import com.second.world.weather.core.bases.Mapper
 import retrofit2.Response

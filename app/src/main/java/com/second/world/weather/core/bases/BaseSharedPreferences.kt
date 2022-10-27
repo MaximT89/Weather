@@ -7,12 +7,19 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class BaseSharedPreferences @Inject constructor(@ApplicationContext private val context: Context) {
+interface BaseSharedPreferences {
 
-    companion object {
-        private const val APP_PREF = "app_prefs"
+    fun defaultPref(): SharedPreferences
+
+    class Impl @Inject constructor(@ApplicationContext private val context: Context) :
+        BaseSharedPreferences {
+
+        companion object {
+            private const val APP_PREF = "app_prefs"
+        }
+
+        override fun defaultPref(): SharedPreferences =
+            context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE)
     }
 
-    fun defaultPref(): SharedPreferences =
-        context.getSharedPreferences(APP_PREF, Context.MODE_PRIVATE)
 }

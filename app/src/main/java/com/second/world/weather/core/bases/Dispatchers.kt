@@ -18,17 +18,18 @@ interface Dispatchers {
 
         override fun launchUI(
             scope: CoroutineScope,
-            block: suspend CoroutineScope.() -> Unit
+            block: suspend CoroutineScope.() -> Unit,
         ): Job = scope.launch(ui, block = block)
 
         override fun launchBackground(
             scope: CoroutineScope,
-            block: suspend CoroutineScope.() -> Unit
+            block: suspend CoroutineScope.() -> Unit,
         ): Job = scope.launch(background, block = block)
 
         override suspend fun changeToUI(block: suspend CoroutineScope. () -> Unit) =
             withContext(ui, block)
     }
 
-    class Impl @Inject constructor() : Abstract(kotlinx.coroutines.Dispatchers.Main, kotlinx.coroutines.Dispatchers.IO)
+    class Impl @Inject constructor() :
+        Abstract(kotlinx.coroutines.Dispatchers.Main, kotlinx.coroutines.Dispatchers.IO)
 }

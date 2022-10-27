@@ -1,4 +1,4 @@
-package com.ahinfo.ahteam.core.remote
+package com.second.world.weather.core.remote
 
 import java.io.IOException
 

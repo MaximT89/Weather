@@ -7,9 +7,18 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ResourceProvider @Inject constructor(@ApplicationContext private val context: Context) {
+interface ResourceProvider {
 
-    fun string(@StringRes id: Int): String = context.getString(id)
+    fun string(@StringRes id: Int): String
 
-    fun string(@StringRes id: Int, vararg args: String?): String = context.getString(id, *args)
+    fun string(@StringRes id: Int, vararg args: String?): String
+
+    class Impl @Inject constructor(@ApplicationContext private val context: Context) :
+        ResourceProvider {
+
+        override fun string(@StringRes id: Int): String = context.getString(id)
+
+        override fun string(@StringRes id: Int, vararg args: String?): String =
+            context.getString(id, *args)
+    }
 }
